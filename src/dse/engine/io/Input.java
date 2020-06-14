@@ -11,12 +11,14 @@ public class Input {
     private GLFWMouseButtonCallback mouseButtons;
 
     private boolean[] keys = new boolean[GLFW.GLFW_KEY_LAST];
+    private boolean[] buttons = new boolean[GLFW.GLFW_MOUSE_BUTTON_LAST];
+    private double mouseX, mouseY;
 
     public void Input() {
         keyboard = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-
+//                keys
             }
         };
     }
