@@ -65,7 +65,6 @@ public class Window {
         // Set the clear color
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-        glfwSwapBuffers(window); // swap the color buffers
 
         frames++;
         if (System.currentTimeMillis() > time + 1000) {
@@ -73,6 +72,10 @@ public class Window {
             time = System.currentTimeMillis();
             frames = 0;
         }
+    }
+
+    public void swapBuffers() {
+        glfwSwapBuffers(window); // swap the color buffers
     }
 
     public long getWindow() {

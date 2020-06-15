@@ -1,7 +1,11 @@
 package dse.main;
 
+import dse.engine.graphics.Mesh;
+import dse.engine.graphics.Renderer;
+import dse.engine.graphics.Vertex;
 import dse.engine.io.Input;
 import dse.engine.io.Window;
+import dse.engine.math.Vector3f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -15,6 +19,19 @@ public class Main implements Runnable {
     public final int WIDTH = 800, HEIGHT = 600;
     public Input input;
 
+    public Renderer renderer;
+
+    // test data
+    public Mesh mesh = new Mesh(new Vertex[]{
+        new Vertex(new Vector3f(-0.5f,  0.5f, 0.0f)),
+        new Vertex(new Vector3f( 0.5f,  0.5f, 0.0f)),
+        new Vertex(new Vector3f( 0.5f, -0.5f, 0.0f)),
+        new Vertex(new Vector3f(-0.5f, -0.5f, 0.0f))
+    }, new int[]{
+        0, 1, 2,
+        0, 3, 2
+    });
+
     public void start() {
         game = new Thread(this, "game");
         game.run();
@@ -26,7 +43,7 @@ public class Main implements Runnable {
         GLFWErrorCallback.createPrint(System.err).set();
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
-        if ( !glfwInit() )
+        if (!glfwInit())
             throw new IllegalStateException("Unable to initialize GLFW");
 
         // Configure GLFW
@@ -43,6 +60,11 @@ public class Main implements Runnable {
         glfwSetKeyCallback(window.getWindow(), input.getKeyboardCallback());
         glfwSetCursorPosCallback(window.getWindow(), input.getMouseMoveCallback());
         glfwSetMouseButtonCallback(window.getWindow(), input.getMouseButtonsCallback());
+
+        // test data
+        GL.createCapabilities();
+        renderer = new Renderer();
+        mesh.create();
     }
 
     public void loop() {
@@ -55,15 +77,25 @@ public class Main implements Runnable {
 
         // Run the rendering loop until the user has attempted to close
         // the window or has pressed the ESCAPE key.
-        while ( !glfwWindowShouldClose(window.getWindow())) {
+        while (!glfwWindowShouldClose(window.getWindow())) {
             if (Input.isKeyReleased(GLFW_KEY_ESCAPE)) {
                 glfwSetWindowShouldClose(window.getWindow(), true);
             }
-            window.update();
+            update();
+            render();
             // Poll for window events. The key callback above will only be
             // invoked during this call.
             glfwPollEvents();
         }
+    }
+
+    private void update() {
+        window.update();
+    }
+
+    private void render() {
+        renderer.renderMesh(mesh);
+        window.swapBuffers();
     }
 
     @Override
