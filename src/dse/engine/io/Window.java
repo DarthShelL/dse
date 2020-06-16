@@ -62,16 +62,16 @@ public class Window {
     }
 
     public void update() {
-        // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-
         frames++;
-        if (System.currentTimeMillis() > time + 1000) {
+        if (System.currentTimeMillis() >= time + 1000) {
             glfwSetWindowTitle(window, title + " | fps: " + frames);
             time = System.currentTimeMillis();
             frames = 0;
         }
+
+        // Set the clear color
+        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
     }
 
     public void swapBuffers() {

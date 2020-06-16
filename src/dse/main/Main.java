@@ -2,6 +2,7 @@ package dse.main;
 
 import dse.engine.graphics.Mesh;
 import dse.engine.graphics.Renderer;
+import dse.engine.graphics.Shader;
 import dse.engine.graphics.Vertex;
 import dse.engine.io.Input;
 import dse.engine.io.Window;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
 
 public class Main implements Runnable {
     public Thread game;
@@ -19,6 +21,7 @@ public class Main implements Runnable {
     public final int WIDTH = 800, HEIGHT = 600;
     public Input input;
 
+    public Shader shader;
     public Renderer renderer;
 
     // test data
@@ -48,6 +51,10 @@ public class Main implements Runnable {
 
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
@@ -63,7 +70,9 @@ public class Main implements Runnable {
 
         // test data
         GL.createCapabilities();
-        renderer = new Renderer();
+        shader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
+        shader.create();
+        renderer = new Renderer(shader);
         mesh.create();
     }
 
